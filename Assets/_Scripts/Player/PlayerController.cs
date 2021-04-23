@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,10 @@ public class PlayerController : MonoBehaviour
     public float runSpeed;
 
     [Header("Camera Controls")]
+    public CinemachineVirtualCamera virtualCamera;
+    public Vector3 largeOffset;
+    public Vector3 smallOffset;
+    [Space]
     public GameObject followTarget;
     public float rotationPower;
     public float horizontalDampening;
@@ -23,6 +28,10 @@ public class PlayerController : MonoBehaviour
     // Animator Hashes
     public readonly int IsWalkingHash = Animator.StringToHash("IsWalking");
     public readonly int IsRunningHash = Animator.StringToHash("IsRunning");
+    public readonly int IsDizzyHash = Animator.StringToHash("IsDizzy");
+    public readonly int PickupLargeHash = Animator.StringToHash("PickupLarge");
+    public readonly int PickupSmallHash = Animator.StringToHash("PickupSmall");
+    public readonly int LandingHash = Animator.StringToHash("Landing");
 
     // Start is called before the first frame update
     void Start()
@@ -61,7 +70,32 @@ public class PlayerController : MonoBehaviour
 
     public void OnInteract(InputValue value)
     {
+        if (playerStates.isWalking || playerStates.isRunning)
+            return;
 
+        // TODO: sphere cast for mushroom
+
+        if (playerStates.isLarge)
+        {
+            transform.localScale = playerStates.shrinkScale;
+            Vector3 pos = transform.position;
+            pos.y = 0.5f;
+            transform.position = pos;
+
+            virtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(0, 1.25f, -1);
+
+            anim.SetTrigger(LandingHash);
+
+            playerStates.isLarge = false;
+        }
+        else
+        {
+            transform.localScale = new Vector3(1, 1, 1);
+
+            virtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(0, 2.5f, -2);
+
+            playerStates.isLarge = true;
+        }
     }
 
     private void Update()

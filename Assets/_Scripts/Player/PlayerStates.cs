@@ -4,21 +4,16 @@ using UnityEngine;
 
 public class PlayerStates : MonoBehaviour
 {
+    [Header("Size")]
+    public bool isLarge = true;
+    public Vector3 shrinkScale;
+
     [Header("Movement")]
     public bool isWalking;
     public bool isRunning;
+    public bool isDizzy;
 
     [Header("Interaction")]
-    public bool canInteract;
     public bool isInteracting;
-
-    private void OnTriggerEnter(Collider other)
-    {
-        
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        
-    }
+    public bool isPaused;
 }
