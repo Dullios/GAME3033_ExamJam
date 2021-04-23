@@ -4,14 +4,20 @@ using UnityEngine;
 
 public class PlayerStates : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [Header("Movement")]
+    public bool isWalking;
+    public bool isRunning;
+
+    [Header("Interaction")]
+    public bool canInteract;
+    public bool isInteracting;
+
+    private void OnTriggerEnter(Collider other)
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerExit(Collider other)
     {
         
     }
