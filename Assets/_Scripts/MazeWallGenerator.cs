@@ -53,7 +53,7 @@ public class MazeWallGenerator : MonoBehaviour
                         temp1.transform.Rotate(0, Random.Range(0.0f, 360.0f), 0);
 
                         temp2 = Instantiate(GetPiece(), wallNegativeX.transform);
-                        temp2.transform.localPosition = new Vector3(widthOffset, 0, length - lengthOffset);
+                        temp2.transform.localPosition = new Vector3(-widthOffset, 0, length - lengthOffset);
                         temp2.transform.Rotate(0, Random.Range(0.0f, 360.0f), 0);
 
                         temp3 = Instantiate(GetPiece(), wallPositiveZ.transform);
@@ -61,19 +61,19 @@ public class MazeWallGenerator : MonoBehaviour
                         temp3.transform.Rotate(0, Random.Range(0.0f, 360.0f), 0);
                         break;
 
-                    case MazePiece.Corner:
+                    case MazePiece.Hallway:
                         temp1 = Instantiate(GetPiece(), wallPositiveX.transform);
                         temp1.transform.localPosition = new Vector3(widthOffset, 0, length - lengthOffset);
                         temp1.transform.Rotate(0, Random.Range(0.0f, 360.0f), 0);
 
                         temp2 = Instantiate(GetPiece(), wallNegativeX.transform);
-                        temp2.transform.localPosition = new Vector3(widthOffset, 0, length - lengthOffset);
+                        temp2.transform.localPosition = new Vector3(-widthOffset, 0, length - lengthOffset);
                         temp2.transform.Rotate(0, Random.Range(0.0f, 360.0f), 0);
 
                         wallPositiveZ.SetActive(false);
                         break;
 
-                    case MazePiece.Hallway:
+                    case MazePiece.Corner:
                         temp1 = Instantiate(GetPiece(), wallPositiveX.transform);
                         temp1.transform.localPosition = new Vector3(widthOffset, 0, length - lengthOffset);
                         temp1.transform.Rotate(0, Random.Range(0.0f, 360.0f), 0);
@@ -86,11 +86,11 @@ public class MazeWallGenerator : MonoBehaviour
                         break;
 
                     case MazePiece.Wall:
-                        temp1 = Instantiate(GetPiece(), wallPositiveX.transform);
-                        temp1.transform.localPosition = new Vector3(widthOffset, 0, length - lengthOffset);
+                        temp1 = Instantiate(GetPiece(), wallPositiveZ.transform);
+                        temp1.transform.localPosition = new Vector3(length - lengthOffset, 0, widthOffset);
                         temp1.transform.Rotate(0, Random.Range(0.0f, 360.0f), 0);
 
-                        wallPositiveZ.SetActive(false);
+                        wallPositiveX.SetActive(false);
                         wallNegativeX.SetActive(false);
                         break;
                 }
@@ -98,7 +98,9 @@ public class MazeWallGenerator : MonoBehaviour
         }
         else
         {
-
+            wallPositiveX.SetActive(false);
+            wallNegativeX.SetActive(false);
+            wallPositiveZ.SetActive(false);
         }
     }
 
