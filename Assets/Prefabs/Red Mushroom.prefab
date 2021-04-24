@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7032331443876780361}
   - component: {fileID: 7032331443876780367}
   - component: {fileID: 7032331443876780366}
+  - component: {fileID: 506443539}
   m_Layer: 10
   m_Name: Red Mushroom
   m_TagString: Red Mushroom
@@ -4814,6 +4815,19 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!135 &506443539
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7032331443876780360}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8448065585098323554
 GameObject:
   m_ObjectHideFlags: 0

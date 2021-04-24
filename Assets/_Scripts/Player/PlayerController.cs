@@ -10,6 +10,11 @@ public class PlayerController : MonoBehaviour
     public float walkSpeed;
     public float runSpeed;
 
+    [Header("Interaction")]
+    public LayerMask interactionMask;
+    private RaycastHit hitInfo;
+    public bool isRedShroom;
+
     [Header("Camera Controls")]
     public CinemachineVirtualCamera virtualCamera;
     public Vector3 largeOffset;
@@ -72,39 +77,91 @@ public class PlayerController : MonoBehaviour
     {
         if (playerStates.isWalking || playerStates.isRunning)
             return;
-
-        // TODO: sphere cast for mushroom
-
-        if (playerStates.isLarge)
+        
+        if (Physics.Raycast(transform.position, transform.forward, out hitInfo, 1, interactionMask))
         {
-            transform.localScale = playerStates.shrinkScale;
-            Vector3 pos = transform.position;
-            pos.y = 0.5f;
-            transform.position = pos;
+            if (hitInfo.transform.CompareTag("Red Mushroom"))
+                isRedShroom = true;
+            else
+                isRedShroom = false;
 
-            virtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(0, 1.25f, -1);
+            if (playerStates.isLarge)
+            {
+                playerStates.isInteracting = true;
+                anim.SetTrigger(PickupLargeHash);
+            }
+            else
+            {
+                playerStates.isInteracting = true;
+                anim.SetTrigger(PickupSmallHash);
+            }
+        }
+    }
 
-            anim.SetTrigger(LandingHash);
+    public void OnConsumeMushroom()
+    {
+        if (isRedShroom)
+        {
+            if (playerStates.isLarge)
+            {
+                anim.SetTrigger(LandingHash);
 
-            playerStates.isLarge = false;
+                transform.localScale = playerStates.shrinkScale;
+                Vector3 pos = transform.position;
+                pos.y = 0.5f;
+                transform.position = pos;
+
+                virtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = smallOffset;
+
+                playerStates.isLarge = false;
+                gameObject.layer = 7;
+            }
+            else
+            {
+                SetDizziness(true);
+                StartCoroutine(DizzyRoutine());
+            }
         }
         else
         {
-            transform.localScale = new Vector3(1, 1, 1);
+            if (playerStates.isLarge)
+            {
+                SetDizziness(true);
+                StartCoroutine(DizzyRoutine());
+            }
+            else
+            {
+                transform.localScale = new Vector3(1, 1, 1);
 
-            virtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(0, 2.5f, -2);
+                virtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = largeOffset;
 
-            playerStates.isLarge = true;
+                playerStates.isLarge = true;
+                gameObject.layer = 6;
+            }
         }
+
+        playerStates.isInteracting = false;
     }
 
     private void Update()
     {
-        if (playerStates.isInteracting)
+        if (playerStates.isInteracting || playerStates.isDizzy)
             return;
 
         float currentSpeed = playerStates.isRunning ? runSpeed : walkSpeed;
         Vector3 moveDirection = transform.forward * (currentSpeed * Time.deltaTime);
         transform.position += playerStates.isWalking ? moveDirection : Vector3.zero;
+    }
+
+    private void SetDizziness(bool dizzy)
+    {
+        anim.SetBool(IsDizzyHash, dizzy);
+        playerStates.isDizzy = dizzy;
+    }
+
+    IEnumerator DizzyRoutine()
+    {
+        yield return new WaitForSeconds(3.0f);
+        SetDizziness(false);
     }
 }
