@@ -9,7 +9,7 @@
 /[Bb]uilds/
 /[Ll]ogs/
 /[Mm]emoryCaptures/
-/[Rr]ussellBrabers_Builds/
+/[Rr]ussellBrabersBuild/
 
 # Never ignore Asset meta data
 !/[Aa]ssets/**/*.meta
@@ -59,3 +59,4 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+Build.zip

@@ -43,6 +43,11 @@ public class PlayerController : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
 
+        if (Application.platform == RuntimePlatform.WebGLPlayer)
+            rotationPower = 2.0f;
+        else
+            rotationPower = 0.2f;
+
         anim = GetComponent<Animator>();
         playerStates = GetComponent<PlayerStates>();
     }
