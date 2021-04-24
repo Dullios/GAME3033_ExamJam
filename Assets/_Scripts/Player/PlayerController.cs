@@ -61,6 +61,9 @@ public class PlayerController : MonoBehaviour
 
     public void OnLook(InputValue value)
     {
+        if (playerStates.isInteracting || GameManager.instance.isPaused)
+            return;
+
         Vector2 aimValue = value.Get<Vector2>();
         Quaternion addedRotation = Quaternion.AngleAxis(Mathf.Lerp(previousMouseDelta.x, aimValue.x, 1.0f / horizontalDampening) * rotationPower, transform.up);
 
@@ -143,9 +146,14 @@ public class PlayerController : MonoBehaviour
         playerStates.isInteracting = false;
     }
 
+    public void OnPause(InputValue value)
+    {
+        GameManager.instance.PauseGame();
+    }
+
     private void Update()
     {
-        if (playerStates.isInteracting || playerStates.isDizzy)
+        if (playerStates.isInteracting || playerStates.isDizzy || GameManager.instance.isPaused)
             return;
 
         float currentSpeed = playerStates.isRunning ? runSpeed : walkSpeed;
