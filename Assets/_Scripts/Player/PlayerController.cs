@@ -49,6 +49,9 @@ public class PlayerController : MonoBehaviour
 
     public void OnMovement(InputValue value)
     {
+        if (playerStates.isInteracting || GameManager.instance.isPaused)
+            return;
+
         playerStates.isWalking = value.isPressed;
         anim.SetBool(IsWalkingHash, value.isPressed);
     }
@@ -118,6 +121,8 @@ public class PlayerController : MonoBehaviour
 
                 playerStates.isLarge = false;
                 gameObject.layer = 7;
+
+                GameManager.instance.SmallPop();
             }
             else
             {
@@ -140,6 +145,8 @@ public class PlayerController : MonoBehaviour
 
                 playerStates.isLarge = true;
                 gameObject.layer = 6;
+
+                GameManager.instance.LargePop();
             }
         }
 
@@ -148,6 +155,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnPause(InputValue value)
     {
+        GameManager.instance.MenuClick();
         GameManager.instance.PauseGame();
     }
 
